@@ -15,10 +15,12 @@ class HttpServer {
   #staticRoot;
   #server;
   #cache;
+  #notFoundHandle;
   constructor(port, staticRoot) {
     this.#port = port;
     this.#staticRoot = staticRoot;
     this.#cache = new Map();
+    this.#notFoundHandle = undefined;
     this.#server = http.createServer((req, res) => {
       const route = req.url;
       if (route == "./favicon.ico") return;
@@ -40,14 +42,13 @@ class HttpServer {
         const staticPath = this.#staticRoot + route;
         fs.readFile(staticPath, "utf-8", (err, data) => {
           if (err) {
-            res.writeHead(404, { "Content-type": "text/plain" });
-            res.end();
-            return;
+            this.#notFoundHandle(req, res);
           }
           this.#cache.set(route, data);
           res.writeHead(200, contentType);
           res.write(data);
           res.end();
+          return;
         });
       }
       if (route == "/") {
@@ -62,16 +63,17 @@ class HttpServer {
         const staticPath = this.#staticRoot + relativePath;
         fs.readFile(staticPath, "utf-8", (err, data) => {
           if (err) {
-            res.writeHead(404, { "Content-type": "text/plain" });
-            res.end();
+            this.#notFoundHandle(req, res);
             return;
           }
           this.#cache.set(relativePath, data);
           res.writeHead(200, { "Content-type": "text/html" });
           res.write(data);
           res.end();
+          return;
         });
       }
+      this.#notFoundHandle(req, res);
     });
   }
 
@@ -82,11 +84,15 @@ class HttpServer {
     return this;
   }
 
-  onError(errorHandle) {
+  onServerError(errorHandle) {
     this.#server.on("error", (err) => {
       errorHandle(err);
     });
     return this;
+  }
+
+  onNotFoundError(handle) {
+   this.#notFoundHandle = handle;
   }
 }
 
