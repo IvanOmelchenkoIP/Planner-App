@@ -11,7 +11,7 @@ const render = (html) => {
   ) => {
     await staticRouter.handle(req, res, params[0], staticManager, errorManager);
   };
-  return { fn: renderInner, params: [html] };
+  return { controllerMethod: renderInner, params: [html] };
 };
 
 export default render;

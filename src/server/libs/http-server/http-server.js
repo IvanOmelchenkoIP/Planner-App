@@ -20,10 +20,15 @@ class HttpServer {
     this.#port = port;
     this.#httpErrorManager = new Map();
     this.#httpErrorManager.set(HttpErrors.NotFound, defaultNotFoundHandle);
-    this.#router = new RouterManager(new StaticManager(staticRoot));
+    const staticManager = new StaticManager(staticRoot);
+    this.#router = new RouterManager(staticManager);
     this.#server = http.createServer((req, res) => {
       this.#router.handle(req, res, this.#httpErrorManager);
     });
+  }
+
+  static create(port, staticRoot) {
+    return new HttpServer(port, staticRoot);
   }
 
   listen(listenHandle) {

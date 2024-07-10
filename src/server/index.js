@@ -6,7 +6,7 @@ import HttpServer from "./libs/http-server/http-server.js";
 const PORT = 3000;
 const STATIC_ROOT = "./src/resources/static";
 
-new HttpServer(PORT, STATIC_ROOT)
+HttpServer.create(PORT, STATIC_ROOT)
   .onServerError((err) => {
     console.log(err);
   })

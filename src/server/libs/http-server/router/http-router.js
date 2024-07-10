@@ -33,8 +33,8 @@ class HttpRouter {
       notFoundHandle(req, res);
       return;
     }
-    const { fn, params } = controllerMethodObject;
-    fn(req, res, staticRouter, staticManager, errorManager, ...params);
+    const { controllerMethod, params } = controllerMethodObject;
+    controllerMethod(req, res, staticRouter, staticManager, errorManager, ...params);
   }
 }
 
