@@ -24,17 +24,48 @@ class HttpRouter {
     const controller = this.#routes.get(route);
     if (!controller) {
       const notFoundHandle = errorManager.get(HttpErrors.NotFound);
-      notFoundHandle(req, res);
+      if (notFoundHandle instanceof Function) {
+        notFoundHandle(req, res);
+      } else {
+        const { controllerMethod, params } = notFoundHandle;
+        controllerMethod(
+          req,
+          res,
+          staticRouter,
+          staticManager,
+          errorManager,
+          ...params
+        );
+      }
       return;
     }
     const controllerMethodObject = controller[req.method];
     if (!controllerMethodObject) {
       const notFoundHandle = errorManager.get(HttpErrors.NotFound);
-      notFoundHandle(req, res);
+      if (notFoundHandle instanceof Function) {
+        notFoundHandle(req, res);
+      } else {
+        const { controllerMethod, params } = notFoundHandle;
+        controllerMethod(
+          req,
+          res,
+          staticRouter,
+          staticManager,
+          errorManager,
+          ...params
+        );
+      }
       return;
     }
     const { controllerMethod, params } = controllerMethodObject;
-    controllerMethod(req, res, staticRouter, staticManager, errorManager, ...params);
+    controllerMethod(
+      req,
+      res,
+      staticRouter,
+      staticManager,
+      errorManager,
+      ...params
+    );
   }
 }
 

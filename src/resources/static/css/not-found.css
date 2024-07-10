@@ -1,0 +1,58 @@
+.root {
+    height: 100vh;
+	min-height: 100vh;
+	width: 100vw;
+	min-width: 100vw;
+}
+
+.main-root {
+    height: 100vh;
+	min-height: 100vh;
+	width: 100vw;
+	min-width: 100vw;
+}
+
+.error-pannel {
+    width: 90%;
+    height: 50%;
+    box-shadow: rgba(0, 0, 0, 0.9) 1px 2px 9px;
+    position: relative;
+    transform: translate(0, +50%);
+    margin: auto;
+    background: #ABA9C3;
+    font-size: 140%;
+}
+
+.error-text-pannel {
+    position: relative;
+    text-align: center;
+    margin: auto;
+    transform: translate(0, +50%);
+}
+
+.error-header {
+    font-size: 240%;
+}
+
+.error-linker {
+    font-size: 80%;
+}
+
+#error-home-link {
+    text-decoration: none;
+    transition: transform 133ms ease;
+}
+
+#error-home-link:hover {
+    color: rgb(209, 158, 158);
+    transition: transform 133ms ease;
+}
+
+@media all and (orientation: landscape) {
+    .error-pannel {
+        width: 40%;
+        height: 50%;
+        transform: translate(0%, +50%);
+        margin: auto;
+    }
+}
