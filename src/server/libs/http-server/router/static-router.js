@@ -12,7 +12,19 @@ class StaticRouter {
     if (err) {
       if (err.code == "ENOENT") {
         const notFoundProcessor = errorManager.get(HttpErrors.NotFound);
-        notFoundProcessor(req, res);
+        if (notFoundHandle instanceof Function) {
+          notFoundHandle(req, res);
+        } else {
+          const { controllerMethod, params } = notFoundHandle;
+          controllerMethod(
+            req,
+            res,
+            staticRouter,
+            staticManager,
+            errorManager,
+            ...params
+          );
+        }
         return;
       }
       throw new Error(`Error occured while processing file ${html}`);
